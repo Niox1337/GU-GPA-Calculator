@@ -20,10 +20,20 @@ async function showEditCourseForm(){
   editCourse.classList.add("d-none")
 }
 
+async function finishEditing(){
+  const addCourse = document.querySelector("#add-course-form");
+  addCourse.classList.add("d-none")
+  const editCourse = document.querySelector("#edit-course-button");
+  editCourse.classList.remove("d-none")
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   greetInputEl = document.querySelector("#greet-input");
   greetMsgEl = document.querySelector("#greet-msg");
   document.querySelector("#edit-course-button").addEventListener("click", (e) => {
     showEditCourseForm().then(r => console.log(r));
+  });
+  document.querySelector("#finish-editing").addEventListener("click", (e) => {
+    finishEditing().then(r => console.log(r));
   });
 });

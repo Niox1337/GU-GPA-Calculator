@@ -16,8 +16,10 @@ async function countGradeInput(){
 window.addEventListener("DOMContentLoaded", () => {
   greetInputEl = document.querySelector("#greet-input");
   greetMsgEl = document.querySelector("#greet-msg");
-  document.querySelector("#greet-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    greet().then(r => console.log(r));
+  document.querySelector("#edit-course-button").addEventListener("click", (e) => {
+    const addCourse = document.querySelector("#add-course-form");
+    addCourse.classList.remove("d-none")
+    const editCourse = document.querySelector("#edit-course-button");
+    editCourse.classList.add("d-none")
   });
 });

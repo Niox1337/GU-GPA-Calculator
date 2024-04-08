@@ -88,6 +88,21 @@ button {
   margin-right: 5px;
 }
 
+.input-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: start;
+  flex-wrap: wrap;
+}
+
+.input-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: #f6f6f6;

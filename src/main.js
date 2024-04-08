@@ -13,13 +13,17 @@ async function countGradeInput(){
   return gradeInputs.length;
 }
 
+async function showEditCourseForm(){
+  const addCourse = document.querySelector("#add-course-form");
+  addCourse.classList.remove("d-none")
+  const editCourse = document.querySelector("#edit-course-button");
+  editCourse.classList.add("d-none")
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   greetInputEl = document.querySelector("#greet-input");
   greetMsgEl = document.querySelector("#greet-msg");
   document.querySelector("#edit-course-button").addEventListener("click", (e) => {
-    const addCourse = document.querySelector("#add-course-form");
-    addCourse.classList.remove("d-none")
-    const editCourse = document.querySelector("#edit-course-button");
-    editCourse.classList.add("d-none")
+    showEditCourseForm().then(r => console.log(r));
   });
 });

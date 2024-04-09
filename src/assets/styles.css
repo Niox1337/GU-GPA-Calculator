@@ -16,7 +16,7 @@ body {
 
 .logo {
   height: 6em;
-  padding: 1.5em;
+  width: fit-content;
   will-change: filter;
   transition: 0.75s;
 }

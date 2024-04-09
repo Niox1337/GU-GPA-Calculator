@@ -29,8 +29,29 @@ async function finishEditing(){
 
 async function addCourse(){
   let inputColumn;
-  const courseName = document.querySelector("#course-name").value;
-  const credit = document.querySelector("#credit").value;
+  const courseName = document.querySelector("#course-name");
+  const credit = document.querySelector("#credit");
+
+  const existingAlerts = document.querySelectorAll(".alert");
+  existingAlerts.forEach(alert => alert.remove());
+
+  if (!courseName.value.trim() || !credit.value.trim()) {
+    if (!courseName.value.trim()) {
+      const alert = document.createElement("div");
+      alert.className = "alert";
+      alert.textContent = "Course name cannot be empty";
+      alert.style.color = "red";
+      courseName.parentNode.appendChild(alert);
+    }
+    if (!credit.value.trim()) {
+      const alert = document.createElement("div");
+      alert.className = "alert";
+      alert.textContent = "Credit cannot be empty";
+      alert.style.color = "red";
+      credit.parentNode.appendChild(alert);
+    }
+    return;
+  }
   const inputCount = await countGradeInput();
   if (inputCount % 2 === 0){
     inputColumn = document.querySelector("#input-col1");
@@ -38,7 +59,7 @@ async function addCourse(){
     inputColumn = document.querySelector("#input-col2");
   }
   inputColumn.innerHTML += `
-        <label class="input-column fade-in" id="input-label${inputCount+1}"> ${courseName}
+        <label class="input-column fade-in" id="input-label${inputCount+1}"> ${courseName.value}
           <input class="grade-input" id="grade-input${inputColumn+1}">
         </label>
   `

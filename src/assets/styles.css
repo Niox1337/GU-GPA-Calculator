@@ -85,6 +85,11 @@ button {
   justify-content: center;
 }
 
+.alert {
+  margin: 2px;
+  padding: 0.5em;
+}
+
 .input-container {
   display: flex;
   flex-direction: row;

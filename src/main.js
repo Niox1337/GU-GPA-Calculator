@@ -28,6 +28,15 @@ async function finishEditing() {
     editCourse.classList.remove("d-none")
 }
 
+async function alert(selector, valueName){
+    const alert = document.createElement("div");
+    alert.className = "alert";
+    alert.textContent = valueName + " cannot be empty";
+    alert.style.color = "red";
+    selector.parentNode.appendChild(alert);
+
+}
+
 async function addCourse() {
     let inputColumn;
     const courseName = document.querySelector("#course-name");
@@ -38,18 +47,10 @@ async function addCourse() {
 
     if (!courseName.value.trim() || !credit.value.trim()) {
         if (!courseName.value.trim()) {
-            const alert = document.createElement("div");
-            alert.className = "alert";
-            alert.textContent = "Course name cannot be empty";
-            alert.style.color = "red";
-            courseName.parentNode.appendChild(alert);
+            await alert(courseName, "Course Name");
         }
         if (!credit.value.trim()) {
-            const alert = document.createElement("div");
-            alert.className = "alert";
-            alert.textContent = "Credit cannot be empty";
-            alert.style.color = "red";
-            credit.parentNode.appendChild(alert);
+            await alert(credit, "Credit")
         }
         return;
     }

@@ -18,6 +18,7 @@ struct Course{
     grade: String
 }
 
+#[tauri::command]
 fn save(save_name: String, courses: Vec<Course>){
     let mut saves: HashMap<String, Vec<Course>>;
     let mut file = OpenOptions::new()
@@ -42,7 +43,7 @@ fn save(save_name: String, courses: Vec<Course>){
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![greet, save])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

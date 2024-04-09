@@ -72,10 +72,15 @@ async function addCourse() {
     });
 
     Courses.push({
-        courseName: courseName.value,
+        course_name: courseName.value,
         credit: credit.value,
-        grade: null
+        grade: "MV"
     });
+}
+
+async function save(saveName) {
+    await invoke("save", {saveName: saveName, courses: Courses});
+    console.log("Courses saved!");
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -90,7 +95,7 @@ window.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#add-course").addEventListener("click", (e) => {
         addCourse().then(r => console.log(r));
     });
-    document.querySelector("#save-course").addEventListener("click", (e) => {
-
-    })
+    document.querySelector("#save-course").addEventListener("click", async (e) => {
+        await save("test");
+    });
 });

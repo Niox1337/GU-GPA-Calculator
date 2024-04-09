@@ -85,7 +85,7 @@ async function addCourse() {
 
     Courses[courseName.value] = {
         credit: credit.value,
-        grades: null
+        grades: "MV"
     }
 }
 
@@ -93,6 +93,24 @@ async function save(saveName) {
     const data = {[saveName]: Courses};
     await writeTextFile('GPA_Calculator/saves.json', JSON.stringify(data), {dir: BaseDirectory.AppData});
     console.log("Saved");
+}
+
+async function getCurrentCourses() {
+    let currentCourses = {};
+    document.querySelectorAll('.input-column').forEach((input, index) => {
+        const courseName = input.textContent.split('(')[0].trim();
+        const credit = input.textContent.split('(')[1].split(')')[0];
+        const grade = document.querySelector(`#grade-input${index + 1}`).value;
+        currentCourses[courseName] = {
+            credit: credit,
+            grades: grade
+        }
+    });
+    return currentCourses;
+}
+
+async function calculateGPA() {
+    invoke("calculateGPA", {courses: getCurrentCourses()}).then(r => console.log(r));
 }
 
 window.addEventListener("DOMContentLoaded", () => {

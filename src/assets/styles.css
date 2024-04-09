@@ -109,6 +109,10 @@ button {
   flex-direction: column;
 }
 
+.dimmed-text {
+  color: #888;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

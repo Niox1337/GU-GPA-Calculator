@@ -1,6 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::collections::HashMap;
 use serde::Deserialize;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -11,15 +12,11 @@ fn greet(name: &str) -> String {
 
 #[derive(Clone, Deserialize)]
 struct CourseDetail{
+    course: String,
     credit: String,
     grade: String
 }
 
-#[derive(Clone, Deserialize)]
-struct Course{
-    name: String,
-    details: CourseDetail
-}
 
 fn get_number_from_grade(grade: &str) -> Option<i16> {
     match grade.chars().next() {
@@ -38,34 +35,45 @@ fn get_second_char_as_number(grade: &str) -> Option<i16> {
     grade.chars().nth(1).and_then(|c| c.to_digit(10).map(|n| n as i16))
 }
 
-fn get_credit_sum(courses: Vec<Course>) -> i16 {
-    courses.iter()
-        .filter(|course| &course.details.grade != "MV")
-        .map(|course| course.details.credit.parse::<i16>().unwrap())
-        .sum()
+#[tauri::command]
+fn get_credit_sum(courses: Vec<CourseDetail>) -> i16 {
+    let mut total_credit = 0;
+    for course in courses.iter() {
+        if course.grade != "MV" {
+            total_credit += course.credit.parse::<i16>().unwrap();
+        }
+    }
+    total_credit
 }
 
 #[tauri::command]
-fn calculate_gpa(courses: Vec<Course>) -> f32 {
+fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
     let total_credit = get_credit_sum(courses.clone());
-    let mut total_grade:f32 = 0.0;
+    let mut gpa:f32 = 0.0;
+    let mut result: String = String::new();
+
     for course in courses.iter() {
-        if &course.details.grade != "MV" {
-            let credit = &course.details.credit.parse::<f32>().unwrap();
-            let percentage = total_credit as f32 / credit;
-            let mut grade = get_number_from_grade(&course.details.grade).unwrap();
+        if &course.grade != "MV" {
+            let credit = &course.credit.parse::<f32>().unwrap();
+            let percentage = credit / total_credit as f32;
+            let mut grade = get_number_from_grade(&course.grade).unwrap();
             if grade > 0 {
-                grade -= get_second_char_as_number(&course.details.grade).unwrap();
+                grade -= get_second_char_as_number(&course.grade).unwrap();
             }
-            total_grade += grade as f32 * percentage;
+            let final_grade = grade as f32 * percentage;
+            gpa += grade as f32 * percentage;
+            result = format!("{}{} contributes {} * ({} / {})  = {}\n", result, course.course, grade, credit, total_credit, final_grade)
+        } else {
+            result = format!("{}{} doesn't count\n", result, course.course)
         }
     }
-    total_grade
+    result = format!("{}Total Grade: {}", result, gpa);
+    result
 }
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, calculate_gpa])
+        .invoke_handler(tauri::generate_handler![greet, get_credit_sum, get_calculation_detail])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

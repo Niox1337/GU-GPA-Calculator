@@ -1,7 +1,7 @@
 const { createDir, BaseDirectory, readTextFile, writeTextFile, exists } = window.__TAURI__.fs;
 const {invoke} = window.__TAURI__.tauri;
-let Courses = {};
-let currentCourses = {};
+let Courses = [];
+let currentCourses = [];
 let result;
 
 
@@ -83,44 +83,47 @@ async function addCourse() {
         label.classList.remove('fade-in');
     });
 
-    currentCourses[courseName.value] = {
+    currentCourses.push({
+        course: courseName.value,
         credit: credit.value,
-        grades: "MV"
-    }
+        grade: "MV"
+    });
 }
 
 async function save(saveName) {
-    Courses[saveName] = currentCourses;
+    let calculator = Courses.push({[saveName]: await getCurrentCourseVec()});
     await writeTextFile('GPA_Calculator/saves.json', JSON.stringify(Courses), {dir: BaseDirectory.AppData});
     console.log("Saved");
 }
 
-async function getCurrentCourses() {
-    let currentCourses = {};
+
+async function getCurrentCourse() {
+    let currentCourses = [];
     document.querySelectorAll('.grade-input-column').forEach((input, index) => {
         if (input.textContent){
-                const courseName = input.textContent.split('(')[0].trim();
-                const credit = input.textContent.split('(')[1].split(')')[0];
-                const grade = document.querySelector(`#grade-input${index + 1}`).value;
-                currentCourses[courseName] = {
-                    credit: credit,
+            const courseName = input.textContent.split('(')[0].trim();
+            const credit = input.textContent.split('(')[1].split(')')[0];
+            let grade = document.querySelector(`#grade-input${index + 1}`).value;
+            if (!grade){
+                grade = "MV";
             }
-            if (grade) {
-                currentCourses[courseName].grades = grade;
-            } else {
-                currentCourses[courseName].grades = "MV";
-            }
+            currentCourses.push({
+                course: courseName,
+                credit: credit,
+                grade: grade
+            });
         }
     });
     return currentCourses;
 }
 
 async function calculateGPA() {
-    result.textContent = await invoke("calculate_gpa", {courses: getCurrentCourses()}).then(r => console.log(r));
+    console.log(currentCourses);
+    console.log(await invoke("get_calculation_detail", {courses: await getCurrentCourse()}));
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    initializeSaves();
+    initializeSaves().then(r => console.log(r));
     result = document.querySelector("#result");
     document.querySelector("#edit-course-button").addEventListener("click", (e) => {
         showEditCourseForm().then(r => console.log(r));

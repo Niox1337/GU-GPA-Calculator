@@ -102,12 +102,14 @@ async function getCurrentCourses() {
                 const courseName = input.textContent.split('(')[0].trim();
                 const credit = input.textContent.split('(')[1].split(')')[0];
                 const grade = document.querySelector(`#grade-input${index + 1}`).value;
-                console.log(courseName, credit, grade);
                 currentCourses[courseName] = {
                     credit: credit,
-                    grades: grade
             }
-            console.log(currentCourses);
+            if (grade) {
+                currentCourses[courseName].grades = grade;
+            } else {
+                currentCourses[courseName].grades = "MV";
+            }
         }
     });
     return currentCourses;

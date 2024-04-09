@@ -27,8 +27,7 @@ Input as many fields as you want with the format of the University of Glasgow Sc
 Empty fields will be disregarded
 Click on Compute
 The result and steps will be shown below the button
-![image](https://github.com/Niox1337/GU-GPA-Calculator/assets/98660581/71ad37ce-8f28-4677-80d2-91526f9ce076)
-
+![image](https://github.com/Niox1337/GU-GPA-Calculator/assets/98660581/b3c9e448-e82d-491b-ac4d-4c2585cb6636)
 
 ## Support
 Contact Detail:

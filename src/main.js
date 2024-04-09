@@ -90,7 +90,9 @@ async function addCourse() {
 }
 
 async function save(saveName) {
-
+    const data = {[saveName]: Courses};
+    await writeTextFile('GPA_Calculator/saves.json', JSON.stringify(data), {dir: BaseDirectory.AppData});
+    console.log("Saved");
 }
 
 window.addEventListener("DOMContentLoaded", () => {

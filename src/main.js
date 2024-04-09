@@ -27,6 +27,27 @@ async function finishEditing(){
   editCourse.classList.remove("d-none")
 }
 
+async function addCourse(){
+  let inputColumn;
+  const courseName = document.querySelector("#course-name").value;
+  const credit = document.querySelector("#credit").value;
+  const inputCount = await countGradeInput();
+  if (inputCount % 2 === 0){
+    inputColumn = document.querySelector("#input-col1");
+  } else {
+    inputColumn = document.querySelector("#input-col2");
+  }
+  inputColumn.innerHTML += `
+        <label class="input-column fade-in" id="input-label${inputCount+1}"> ${courseName}
+          <input class="grade-input" id="grade-input${inputColumn+1}">
+        </label>
+  `
+  const label = document.querySelector(`#input-label${inputCount+1}`);
+  label.addEventListener('animationend', () => {
+    label.classList.remove('fade-in');
+  });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   greetInputEl = document.querySelector("#greet-input");
   greetMsgEl = document.querySelector("#greet-msg");
@@ -35,5 +56,8 @@ window.addEventListener("DOMContentLoaded", () => {
   });
   document.querySelector("#finish-editing").addEventListener("click", (e) => {
     finishEditing().then(r => console.log(r));
+  });
+  document.querySelector("#add-course").addEventListener("click", (e) => {
+    addCourse().then(r => console.log(r));
   });
 });

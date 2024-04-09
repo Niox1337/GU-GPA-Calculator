@@ -104,6 +104,19 @@ button {
   flex-direction: column;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: #f6f6f6;

@@ -106,14 +106,13 @@ async function addCourse() {
         return;
     }
 
-    console.log(currentCourses);
     currentCourses.push({
         course: courseName.value,
         credit: credit.value,
         grade: "MV"
     });
     loadCurrentCourse().then(r => console.log(r));
-    console.log(currentCourses);
+    courseName.value = '';
 }
 
 async function save(saveName) {
@@ -136,7 +135,7 @@ async function getCurrentCourse() {
             currentCourses.push({
                 course: courseName,
                 credit: credit,
-                grade: grade
+                grade: grade.toUpperCase()
             });
         }
     });

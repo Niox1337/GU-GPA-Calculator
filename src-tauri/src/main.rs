@@ -27,6 +27,21 @@ fn get_number_from_grade(grade: &str) -> Option<i16> {
     }
 }
 
+fn get_grade_from_number(grade: i16) -> String {
+    let letter = match grade {
+        18..=22 => "A",
+        15..=17 => "B",
+        12..=14 => "C",
+        9..=11 => "D",
+        6..=8 => "E",
+        3..=5 => "F",
+        1..=2 => "G",
+        _ => "H",
+    };
+    let number = (get_number_from_grade(letter).unwrap() - grade).to_string();
+    format!("{}{}", letter, number)
+}
+
 fn get_second_char_as_number(grade: &str) -> Option<i16> {
     grade.chars().nth(1).and_then(|c| c.to_digit(10).map(|n| n as i16))
 }
@@ -46,7 +61,7 @@ fn get_credit_sum(courses: Vec<CourseDetail>) -> i16 {
 fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
     let total_credit = get_credit_sum(courses.clone());
     let mut gpa:f32 = 0.0;
-    let mut result: String = String::new();
+    let mut result:String = String::new();
     result = format!("{}Total Credit: {}\n", result, total_credit);
 
     for course in courses.iter() {
@@ -57,14 +72,16 @@ fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
             if grade > 0 {
                 grade -= get_second_char_as_number(&course.grade).unwrap();
             }
-            let final_grade = grade as f32 * percentage;
+            let final_grade = (grade as f32 * percentage *100.0).round() / 100.0;
             gpa += grade as f32 * percentage;
             result = format!("{}{} contributes {} * ({} / {})  = {}\n", result, course.course, grade, credit, total_credit, final_grade)
         } else {
             result = format!("{}{} doesn't count\n", result, course.course)
         }
     }
-    result = format!("{}Total Grade: {}", result, gpa);
+    let rounded_gpa = gpa.round() as i16;
+    let letter_grade = get_grade_from_number(rounded_gpa);
+    result = format!("{}Total Grade: {}({})", result, letter_grade, gpa);
     result
 }
 

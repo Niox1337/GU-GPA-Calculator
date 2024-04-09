@@ -2,7 +2,7 @@ const { createDir, BaseDirectory, readTextFile, writeTextFile, exists } = window
 const {invoke} = window.__TAURI__.tauri;
 let Courses = [];
 let currentCourses = [];
-let result;
+let result = document.querySelector("#result");
 
 
 async function initializeSaves() {
@@ -139,7 +139,8 @@ async function getCurrentCourse() {
 }
 
 async function calculateGPA() {
-    console.log(await invoke("get_calculation_detail", {courses: await getCurrentCourse()}));
+    let calculated = await invoke("get_calculation_detail", {courses: await getCurrentCourse()});
+    result.innerHTML = calculated.replace(/\n/g, '<br />');
 }
 
 window.addEventListener("DOMContentLoaded", () => {

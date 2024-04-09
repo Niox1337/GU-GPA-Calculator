@@ -2,7 +2,7 @@ const {invoke} = window.__TAURI__.tauri;
 
 let greetInputEl;
 let greetMsgEl;
-let Courses = {};
+let Courses = [];
 
 async function greet() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -71,10 +71,11 @@ async function addCourse() {
         label.classList.remove('fade-in');
     });
 
-    Courses[courseName.value] = {
-        grade: null,
+    Courses.push({
+        courseName: courseName.value,
         credit: credit.value,
-    };
+        grade: null
+    });
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -89,4 +90,7 @@ window.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#add-course").addEventListener("click", (e) => {
         addCourse().then(r => console.log(r));
     });
+    document.querySelector("#save-course").addEventListener("click", (e) => {
+
+    })
 });

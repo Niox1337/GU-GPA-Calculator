@@ -1,4 +1,4 @@
-const { createDir, BaseDirectory, readTextFile, writeTextFile, exists } = window.__TAURI__.fs;
+const {createDir, BaseDirectory, readTextFile, writeTextFile, exists} = window.__TAURI__.fs;
 const {invoke} = window.__TAURI__.tauri;
 let Courses = [];
 let currentCourses = [];
@@ -31,15 +31,20 @@ async function loadCurrentCourse() {
         <div class="input-svg-container">
           <input class="grade-input" id="grade-input${index}">
           <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 16 16" class="input-deletion">
+          <path fill="#f78f8f" d="M8 9.704L4.057 13.646 2.354 11.943 6.296 8 2.354 4.057 4.057 2.354 8 6.296 11.943 2.354 13.646 4.057 9.704 8 13.646 11.943 11.943 13.646z"></path><path fill="#c74343" d="M11.943,2.707l1.35,1.35L9.704,7.646L9.35,8l0.354,0.354l3.589,3.589l-1.35,1.35L8.354,9.704L8,9.35 L7.646,9.704l-3.589,3.589l-1.35-1.35l3.589-3.589L6.65,8L6.296,7.646L2.707,4.057l1.35-1.35l3.589,3.589L8,6.65l0.354-0.354 L11.943,2.707 M11.943,2L8,5.943L4.057,2L2,4.057L5.943,8L2,11.943L4.057,14L8,10.057L11.943,14L14,11.943L10.057,8L14,4.057 L11.943,2L11.943,2z"></path>
 </svg></div>
         </label>
   `
     });
     document.querySelectorAll(".input-deletion").forEach((deletion) => {
         deletion.addEventListener("click", (e) => {
-            currentCourses.splice(currentCourses.indexOf(e.target.parentNode.parentNode.textContent), 1);
-            e.target.parentNode.parentNode.remove();
-            loadCurrentCourse().then(r => console.log(r));
+            let courseName = e.target.parentNode.parentNode.childNodes[0].nodeValue.trim();
+            let courseIndex = currentCourses.findIndex(course => course.course === courseName);
+            if (courseIndex !== -1) {
+                currentCourses.splice(courseIndex, 1);
+                e.target.parentNode.parentNode.remove();
+                loadCurrentCourse().then(r => console.log(r));
+            }
         });
     });
 }
@@ -75,7 +80,7 @@ async function finishEditing() {
     });
 }
 
-async function alert(selector, valueName){
+async function alert(selector, valueName) {
     const alert = document.createElement("div");
     alert.className = "alert";
     alert.textContent = valueName + " cannot be empty";
@@ -121,11 +126,11 @@ async function save(saveName) {
 async function getCurrentCourse() {
     let currentCourses = [];
     document.querySelectorAll('.grade-input-column').forEach((input, index) => {
-        if (input.textContent){
+        if (input.textContent) {
             const courseName = input.textContent.split('(')[0].trim();
             const credit = input.textContent.split('(')[1].split(')')[0];
             let grade = document.querySelector(`#grade-input${index}`).value;
-            if (!grade){
+            if (!grade) {
                 grade = "MV";
             }
             currentCourses.push({

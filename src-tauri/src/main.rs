@@ -7,10 +7,10 @@ use serde::Deserialize;
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
 #[derive(Clone, Deserialize)]
-struct CourseDetail{
+struct CourseDetail {
     course: String,
     credit: String,
-    grade: String
+    grade: String,
 }
 
 
@@ -60,8 +60,8 @@ fn get_credit_sum(courses: Vec<CourseDetail>) -> i16 {
 #[tauri::command]
 fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
     let total_credit = get_credit_sum(courses.clone());
-    let mut gpa:f32 = 0.0;
-    let mut result:String = String::new();
+    let mut gpa: f32 = 0.0;
+    let mut result: String = String::new();
     result = format!("{}Total Credit: {}\n", result, total_credit);
 
     for course in courses.iter() {
@@ -72,7 +72,7 @@ fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
             if grade > 0 {
                 grade -= get_second_char_as_number(&course.grade).unwrap();
             }
-            let final_grade = (grade as f32 * percentage *100.0).round() / 100.0;
+            let final_grade = (grade as f32 * percentage * 100.0).round() / 100.0;
             gpa += grade as f32 * percentage;
             result = format!("{}{} contributes {} * ({} / {})  = {}\n", result, course.course, grade, credit, total_credit, final_grade)
         } else {

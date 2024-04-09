@@ -1,14 +1,10 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::collections::HashMap;
+
 use serde::Deserialize;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
 
 #[derive(Clone, Deserialize)]
 struct CourseDetail{
@@ -73,7 +69,7 @@ fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, get_credit_sum, get_calculation_detail])
+        .invoke_handler(tauri::generate_handler![get_credit_sum, get_calculation_detail])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

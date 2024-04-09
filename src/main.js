@@ -1,13 +1,9 @@
 const { createDir, BaseDirectory, readTextFile, writeTextFile, exists } = window.__TAURI__.fs;
 const {invoke} = window.__TAURI__.tauri;
-let greetInputEl;
-let greetMsgEl;
 let Courses = {};
+let currentCourses = {};
+let result;
 
-async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    greetMsgEl.textContent = await invoke("greet", {name: greetInputEl.value});
-}
 
 async function initializeSaves() {
     const exist = await exists('GPA_Calculator', {dir: BaseDirectory.AppData});
@@ -31,6 +27,8 @@ async function showEditCourseForm() {
     addCourse.classList.remove("d-none")
     const editCourse = document.querySelector("#edit-course-button");
     editCourse.classList.add("d-none")
+    const calculate = document.querySelector("#calculate");
+    calculate.classList.add("d-none");
 }
 
 async function finishEditing() {
@@ -38,6 +36,8 @@ async function finishEditing() {
     addCourse.classList.add("d-none")
     const editCourse = document.querySelector("#edit-course-button");
     editCourse.classList.remove("d-none")
+    const calculate = document.querySelector("#calculate");
+    calculate.classList.remove("d-none");
 }
 
 async function alert(selector, valueName){
@@ -73,9 +73,9 @@ async function addCourse() {
         inputColumn = document.querySelector("#input-col2");
     }
     inputColumn.innerHTML += `
-        <label class="input-column fade-in" id="input-label${inputCount + 1}"> ${courseName.value}
+        <label class="input-column fade-in grade-input-column" id="input-label${inputCount + 1}"> ${courseName.value}
         <span class="dimmed-text" id="credit${inputCount + 1}">(${credit.value})</span>
-          <input class="grade-input" id="grade-input${inputColumn + 1}">
+          <input class="grade-input" id="grade-input${inputCount + 1}">
         </label>
   `
     const label = document.querySelector(`#input-label${inputCount + 1}`);
@@ -83,40 +83,43 @@ async function addCourse() {
         label.classList.remove('fade-in');
     });
 
-    Courses[courseName.value] = {
+    currentCourses[courseName.value] = {
         credit: credit.value,
         grades: "MV"
     }
 }
 
 async function save(saveName) {
-    const data = {[saveName]: Courses};
-    await writeTextFile('GPA_Calculator/saves.json', JSON.stringify(data), {dir: BaseDirectory.AppData});
+    Courses[saveName] = currentCourses;
+    await writeTextFile('GPA_Calculator/saves.json', JSON.stringify(Courses), {dir: BaseDirectory.AppData});
     console.log("Saved");
 }
 
 async function getCurrentCourses() {
     let currentCourses = {};
-    document.querySelectorAll('.input-column').forEach((input, index) => {
-        const courseName = input.textContent.split('(')[0].trim();
-        const credit = input.textContent.split('(')[1].split(')')[0];
-        const grade = document.querySelector(`#grade-input${index + 1}`).value;
-        currentCourses[courseName] = {
-            credit: credit,
-            grades: grade
+    document.querySelectorAll('.grade-input-column').forEach((input, index) => {
+        if (input.textContent){
+                const courseName = input.textContent.split('(')[0].trim();
+                const credit = input.textContent.split('(')[1].split(')')[0];
+                const grade = document.querySelector(`#grade-input${index + 1}`).value;
+                console.log(courseName, credit, grade);
+                currentCourses[courseName] = {
+                    credit: credit,
+                    grades: grade
+            }
+            console.log(currentCourses);
         }
     });
     return currentCourses;
 }
 
 async function calculateGPA() {
-    invoke("calculateGPA", {courses: getCurrentCourses()}).then(r => console.log(r));
+    result.textContent = await invoke("calculate_gpa", {courses: getCurrentCourses()}).then(r => console.log(r));
 }
 
 window.addEventListener("DOMContentLoaded", () => {
     initializeSaves();
-    greetInputEl = document.querySelector("#greet-input");
-    greetMsgEl = document.querySelector("#greet-msg");
+    result = document.querySelector("#result");
     document.querySelector("#edit-course-button").addEventListener("click", (e) => {
         showEditCourseForm().then(r => console.log(r));
     });
@@ -128,5 +131,8 @@ window.addEventListener("DOMContentLoaded", () => {
     });
     document.querySelector("#save-course").addEventListener("click", async (e) => {
         await save("test");
+    });
+    document.querySelector("#calculate").addEventListener("click", async (e) => {
+        await calculateGPA();
     });
 });

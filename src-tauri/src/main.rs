@@ -1,24 +1,24 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use serde::Deserialize;
+
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
+#[derive(Clone, Deserialize)]
 struct CourseDetail{
     credit: String,
     grade: String
 }
 
+#[derive(Clone, Deserialize)]
 struct Course{
     name: String,
     details: CourseDetail
-}
-
-enum Grade {
-    A = 18, B = 15, C = 12, D = 9, E = 6, F = 3, G = 1, H = 0
 }
 
 fn get_number_from_grade(grade: &str) -> Option<i16> {

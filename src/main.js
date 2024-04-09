@@ -1,12 +1,24 @@
+const { createDir, BaseDirectory, readTextFile, writeTextFile, exists } = window.__TAURI__.fs;
 const {invoke} = window.__TAURI__.tauri;
-
 let greetInputEl;
 let greetMsgEl;
-let Courses = [];
+let Courses = {};
 
 async function greet() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     greetMsgEl.textContent = await invoke("greet", {name: greetInputEl.value});
+}
+
+async function initializeSaves() {
+    const exist = await exists('GPA_Calculator', {dir: BaseDirectory.AppData});
+    if (!exist) {
+        await createDir('GPA_Calculator', {dir: BaseDirectory.AppData, recursive: true});
+    }
+    const saveExists = await exists('GPA_Calculator/saves.json', {dir: BaseDirectory.AppData});
+    if (!saveExists) {
+        await writeTextFile('GPA_Calculator/saves.json', JSON.stringify({}), {dir: BaseDirectory.AppData});
+    }
+    Courses = JSON.parse(await readTextFile('GPA_Calculator/saves.json', {dir: BaseDirectory.AppData}));
 }
 
 async function countGradeInput() {
@@ -71,19 +83,18 @@ async function addCourse() {
         label.classList.remove('fade-in');
     });
 
-    Courses.push({
-        course_name: courseName.value,
+    Courses[courseName.value] = {
         credit: credit.value,
-        grade: "MV"
-    });
+        grades: null
+    }
 }
 
 async function save(saveName) {
-    await invoke("save", {saveName: saveName, courses: Courses});
-    console.log("Courses saved!");
+
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+    initializeSaves();
     greetInputEl = document.querySelector("#greet-input");
     greetMsgEl = document.querySelector("#greet-msg");
     document.querySelector("#edit-course-button").addEventListener("click", (e) => {

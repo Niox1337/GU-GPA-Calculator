@@ -11,6 +11,13 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "fs": {
+        "readFile": true,
+        "writeFile": true,
+        "createDir": true,
+        "exists": true,
+        "scope": ["$APPDATA/*","$APPDATA/GPA_Calculator/*","$APPDATA/Roaming/com.tauri.dev/**"]
+      },
       "shell": {
         "all": false,
         "open": true

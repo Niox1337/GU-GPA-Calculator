@@ -2,6 +2,7 @@ const { invoke } = window.__TAURI__.tauri;
 
 let greetInputEl;
 let greetMsgEl;
+let Courses = {};
 
 async function greet() {
   // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -67,6 +68,11 @@ async function addCourse(){
   label.addEventListener('animationend', () => {
     label.classList.remove('fade-in');
   });
+
+    Courses[courseName.value] = {
+      grade: null,
+      credit: credit.value,
+    };
 }
 
 window.addEventListener("DOMContentLoaded", () => {

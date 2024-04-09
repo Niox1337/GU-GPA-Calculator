@@ -5,7 +5,8 @@
 2. [Getting Started](#getting-started)
 3. [Features](#features)
 4. [Usage](#usage)
-5. [Support](#support)
+5. [Future Plans](#future-plans)
+6. [Support](#support)
 
 ## Introduction
 A simple software that can be used to calculate GPA for an academic year at the University of Glasgow
@@ -17,6 +18,11 @@ A simple software that can be used to calculate GPA for an academic year at the 
 ## Features
 - Dynamic course names and credits
 - Showing calculation steps
+
+## Future Plans
+- Feature: Store calculator setups locally
+- Feature: Calculate the class of honour's degree
+- Feature: Calculate the class of Master's degree
 
 ## Usage
 Initial Page:

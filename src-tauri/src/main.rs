@@ -47,6 +47,7 @@ fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
     let total_credit = get_credit_sum(courses.clone());
     let mut gpa:f32 = 0.0;
     let mut result: String = String::new();
+    result = format!("{}Total Credit: {}\n", result, total_credit);
 
     for course in courses.iter() {
         if &course.grade != "MV" {

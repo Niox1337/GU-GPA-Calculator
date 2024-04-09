@@ -17,6 +17,33 @@ async function initializeSaves() {
     Courses = JSON.parse(await readTextFile('GPA_Calculator/saves.json', {dir: BaseDirectory.AppData}));
 }
 
+async function loadCurrentCourse() {
+    let inputColumn1 = document.querySelector("#input-col1");
+    let inputColumn2 = document.querySelector("#input-col2");
+
+    inputColumn1.innerHTML = '';
+    inputColumn2.innerHTML = '';
+    currentCourses.forEach((course, index) => {
+        let inputColumn = index % 2 === 0 ? document.querySelector("#input-col1") : document.querySelector("#input-col2");
+        inputColumn.innerHTML += `
+        <label class="input-column fade-in grade-input-column" id="input-label${index}"> ${course.course}
+        <span class="dimmed-text" id="credit${index}">(${course.credit})</span>
+        <div class="input-svg-container">
+          <input class="grade-input" id="grade-input${index}">
+          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 16 16" class="input-deletion">
+</svg></div>
+        </label>
+  `
+    });
+    document.querySelectorAll(".input-deletion").forEach((deletion) => {
+        deletion.addEventListener("click", (e) => {
+            currentCourses.splice(currentCourses.indexOf(e.target.parentNode.parentNode.textContent), 1);
+            e.target.parentNode.parentNode.remove();
+            loadCurrentCourse().then(r => console.log(r));
+        });
+    });
+}
+
 async function countGradeInput() {
     let gradeInputs = document.querySelectorAll('.grade-input');
     return gradeInputs.length;
@@ -29,6 +56,10 @@ async function showEditCourseForm() {
     editCourse.classList.add("d-none")
     const calculate = document.querySelector("#calculate");
     calculate.classList.add("d-none");
+    const inputDelete = document.querySelectorAll(".input-deletion");
+    inputDelete.forEach((deletion) => {
+        deletion.classList.remove("d-none");
+    });
 }
 
 async function finishEditing() {
@@ -38,6 +69,10 @@ async function finishEditing() {
     editCourse.classList.remove("d-none")
     const calculate = document.querySelector("#calculate");
     calculate.classList.remove("d-none");
+    const inputDelete = document.querySelectorAll(".input-deletion");
+    inputDelete.forEach((deletion) => {
+        deletion.classList.add("d-none");
+    });
 }
 
 async function alert(selector, valueName){
@@ -50,7 +85,6 @@ async function alert(selector, valueName){
 }
 
 async function addCourse() {
-    let inputColumn;
     const courseName = document.querySelector("#course-name");
     const credit = document.querySelector("#credit");
 
@@ -66,28 +100,15 @@ async function addCourse() {
         }
         return;
     }
-    const inputCount = await countGradeInput();
-    if (inputCount % 2 === 0) {
-        inputColumn = document.querySelector("#input-col1");
-    } else {
-        inputColumn = document.querySelector("#input-col2");
-    }
-    inputColumn.innerHTML += `
-        <label class="input-column fade-in grade-input-column" id="input-label${inputCount + 1}"> ${courseName.value}
-        <span class="dimmed-text" id="credit${inputCount + 1}">(${credit.value})</span>
-          <input class="grade-input" id="grade-input${inputCount + 1}">
-        </label>
-  `
-    const label = document.querySelector(`#input-label${inputCount + 1}`);
-    label.addEventListener('animationend', () => {
-        label.classList.remove('fade-in');
-    });
 
+    console.log(currentCourses);
     currentCourses.push({
         course: courseName.value,
         credit: credit.value,
         grade: "MV"
     });
+    loadCurrentCourse().then(r => console.log(r));
+    console.log(currentCourses);
 }
 
 async function save(saveName) {
@@ -103,7 +124,7 @@ async function getCurrentCourse() {
         if (input.textContent){
             const courseName = input.textContent.split('(')[0].trim();
             const credit = input.textContent.split('(')[1].split(')')[0];
-            let grade = document.querySelector(`#grade-input${index + 1}`).value;
+            let grade = document.querySelector(`#grade-input${index}`).value;
             if (!grade){
                 grade = "MV";
             }
@@ -118,7 +139,6 @@ async function getCurrentCourse() {
 }
 
 async function calculateGPA() {
-    console.log(currentCourses);
     console.log(await invoke("get_calculation_detail", {courses: await getCurrentCourse()}));
 }
 
@@ -134,9 +154,9 @@ window.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#add-course").addEventListener("click", (e) => {
         addCourse().then(r => console.log(r));
     });
-    document.querySelector("#save-course").addEventListener("click", async (e) => {
-        await save("test");
-    });
+    // document.querySelector("#save-course").addEventListener("click", async (e) => {
+    //     await save("test");
+    // });
     document.querySelector("#calculate").addEventListener("click", async (e) => {
         await calculateGPA();
     });

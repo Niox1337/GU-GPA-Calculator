@@ -23,6 +23,7 @@ A simple software that can be used to calculate GPA for an academic year at the 
 - Feature: Store calculator setups locally
 - Feature: Calculate the class of honour's degree
 - Feature: Calculate the class of Master's degree
+- Feature: Course grade calculator
 
 ## Usage
 Initial Page:

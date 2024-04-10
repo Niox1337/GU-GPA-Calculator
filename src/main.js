@@ -1,6 +1,6 @@
 const {createDir, BaseDirectory, readTextFile, writeTextFile, exists} = window.__TAURI__.fs;
 const {invoke} = window.__TAURI__.tauri;
-let Courses = [];
+let Courses = {};
 let currentCourses = [];
 let result = document.querySelector("#result");
 
@@ -116,9 +116,9 @@ async function addCourse() {
 }
 
 async function save(saveName) {
-    let calculator = Courses.push({[saveName]: await getCurrentCourse()});
+    Courses[saveName] = await getCurrentCourse();
     await writeTextFile('GPA_Calculator/saves.json', JSON.stringify(Courses), {dir: BaseDirectory.AppData});
-    console.log("Saved");
+    console.log(Courses);
 }
 
 
@@ -159,9 +159,9 @@ window.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#add-course").addEventListener("click", (e) => {
         addCourse().then(r => console.log(r));
     });
-    // document.querySelector("#save-course").addEventListener("click", async (e) => {
-    //     await save("test");
-    // });
+    document.querySelector("#save-confirm").addEventListener("click", async (e) => {
+        await save(document.querySelector("#save-name").value);
+    });
     document.querySelector("#calculate").addEventListener("click", async (e) => {
         await calculateGPA();
     });

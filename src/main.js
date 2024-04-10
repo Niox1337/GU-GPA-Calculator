@@ -116,7 +116,7 @@ async function addCourse() {
 }
 
 async function save(saveName) {
-    let calculator = Courses.push({[saveName]: await getCurrentCourseVec()});
+    let calculator = Courses.push({[saveName]: await getCurrentCourse()});
     await writeTextFile('GPA_Calculator/saves.json', JSON.stringify(Courses), {dir: BaseDirectory.AppData});
     console.log("Saved");
 }

@@ -120,6 +120,24 @@ button {
   color: #888;
 }
 
+.modal-content {
+  background-color: rgb(34, 34, 37);
+  color: #fff;
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+  border-color: rgb(60, 60, 60);
+}
+
+.modal-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

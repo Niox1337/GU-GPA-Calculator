@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="assets/bootstrap.min.css">
+    <script src="assets/bootstrap.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calculator</title>
     <script type="module" src="/main.js" defer></script>
@@ -22,7 +23,7 @@
       <p>Click on the logo to learn more about the grading scheme</p>
       <div id="edit-course">
         <button id="edit-course-button">Edit</button>
-<!--        <button id="save-course">Save</button>-->
+        <button id="save-course" data-bs-toggle="modal" data-bs-target="#save-modal">Save</button>
         <div class="d-none" id="add-course-form">
           <label class="input-column" style="margin: 10px 0 5px 0">Course Name
             <input id="course-name">
@@ -45,6 +46,28 @@
 </div>
 
       <p id="result"></p>
+    </div>
+
+
+
+    <div class="modal fade" id="save-modal" tabindex="-1" aria-labelledby="save-modal-label" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="save-modal-label">Modal title</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <label class="input-column"> Give the setup a name
+              <input id="save-name">
+            </label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="save-cancel">Cancel</button>
+            <button type="button" class="btn btn-primary" id="save-confirm">Save</button>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

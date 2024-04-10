@@ -15,6 +15,7 @@ async function initializeSaves() {
         await writeTextFile('GPA_Calculator/saves.json', JSON.stringify({}), {dir: BaseDirectory.AppData});
     }
     Courses = JSON.parse(await readTextFile('GPA_Calculator/saves.json', {dir: BaseDirectory.AppData}));
+    console.log(Courses);
 }
 
 async function loadCurrentCourse() {
@@ -121,6 +122,20 @@ async function save(saveName) {
     console.log(Courses);
 }
 
+async function updateNavbar() {
+    // Get the navbar unordered list
+    const navbarList = document.querySelector("#setup-nav");
+
+    // Clear the navbar
+    while (navbarList.firstChild) {
+        navbarList.firstChild.remove();
+    }
+
+    Object.keys(Courses).forEach(key => {
+        navbarList.innerHTML += `<li class="nav-item"> ${key} </li>`;
+    });
+}
+
 
 async function getCurrentCourse() {
     let currentCourses = [];
@@ -147,8 +162,10 @@ async function calculateGPA() {
     result.innerHTML = calculated.replace(/\n/g, '<br />');
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-    initializeSaves().then(r => console.log(r));
+window.addEventListener("DOMContentLoaded", async () => {
+    await initializeSaves().then(r => console.log(r));
+    console.log(Courses);
+    await updateNavbar();
     result = document.querySelector("#result");
     document.querySelector("#edit-course-button").addEventListener("click", (e) => {
         showEditCourseForm().then(r => console.log(r));

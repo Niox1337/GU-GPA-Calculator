@@ -152,3 +152,20 @@ button {
     background-color: #0f0f0f69;
   }
 }
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #333;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #444;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #666;
+  border-radius: 6px;
+}

@@ -119,14 +119,11 @@ async function addCourse() {
 async function save(saveName) {
     Courses[saveName] = await getCurrentCourse();
     await writeTextFile('GPA_Calculator/saves.json', JSON.stringify(Courses), {dir: BaseDirectory.AppData});
-    console.log(Courses);
+    updateNavbar().then(r => console.log(r));
 }
 
 async function updateNavbar() {
-    // Get the navbar unordered list
     const navbarList = document.querySelector("#setup-nav");
-
-    // Clear the navbar
     while (navbarList.firstChild) {
         navbarList.firstChild.remove();
     }

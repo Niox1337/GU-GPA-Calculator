@@ -14,15 +14,16 @@ body {
   text-align: center;
 }
 
-.navbar-nav{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
+.navbar-collapse {
+  z-index: 1000;
+}
+
+#setup-nav{
   gap: 10px;
-  justify-content: center;
-  height: 100%;
-  padding-top: 10px;
+}
+
+#setup-nav li:hover {
+  cursor: pointer;
 }
 
 .logo {

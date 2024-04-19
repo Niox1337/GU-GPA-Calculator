@@ -86,6 +86,11 @@ fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
     result
 }
 
+#[tauri::command]
+fn calculate_honours(year3: Vec<CourseDetail>, year4:Vec<CourseDetail>){
+
+}
+
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![get_credit_sum, get_calculation_detail])

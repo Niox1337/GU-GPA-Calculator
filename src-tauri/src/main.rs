@@ -89,7 +89,8 @@ fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
 //function to calculate honours
 #[tauri::command]
 fn calculate_honours(year3: Vec<CourseDetail>, year4:Vec<CourseDetail>){
-
+    let y3_detail = get_calculation_detail(year3);
+    let y4_detail = get_calculation_detail(year4);
 }
 
 fn main() {

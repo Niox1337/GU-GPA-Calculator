@@ -82,7 +82,7 @@ fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
     let rounded_gpa = gpa.round() as i16;
     let gpa_2dp = (gpa * 100.0).round() / 100.0;
     let letter_grade = get_grade_from_number(rounded_gpa);
-    result = format!("{}GPA: {}({})", result, letter_grade, gpa_2dp);
+    result = format!("{}GPA: {} {}", result, letter_grade, gpa_2dp);
     result
 }
 
@@ -91,6 +91,8 @@ fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
 fn calculate_honours(year3: Vec<CourseDetail>, year4:Vec<CourseDetail>){
     let y3_detail = get_calculation_detail(year3);
     let y4_detail = get_calculation_detail(year4);
+    let y3_gpa = y3_detail.split_whitespace().last().unwrap().parse::<f32>().unwrap();
+    let y4_gpa = y4_detail.split_whitespace().last().unwrap().parse::<f32>().unwrap();
 }
 
 fn main() {

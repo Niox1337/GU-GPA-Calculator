@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 <!--
-  Thank you for contributing to [Your Project Name]! This template is for tracking an existing or ongoing feature.
+  Thank you for contributing to GU GPA Calculator! This template is for tracking an existing or ongoing feature.
   Please ensure:
   - This feature is part of the project’s roadmap or has been approved.
   - Any related issues or pull requests are linked.

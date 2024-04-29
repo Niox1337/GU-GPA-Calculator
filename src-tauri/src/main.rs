@@ -57,6 +57,23 @@ fn get_credit_sum(courses: Vec<CourseDetail>) -> i16 {
     total_credit
 }
 
+fn calculate_year_gpa(courses: Vec<CourseDetail>) -> f32 {
+    let total_credit = get_credit_sum(courses.clone());
+    let mut gpa: f32 = 0.0;
+    for course in courses.iter() {
+        if &course.grade != "MV" {
+            let credit = &course.credit.parse::<f32>().unwrap();
+            let percentage = credit / total_credit as f32;
+            let mut grade = get_number_from_grade(&course.grade).unwrap();
+            if grade > 0 {
+                grade -= get_second_char_as_number(&course.grade).unwrap();
+            }
+            gpa += grade as f32 * percentage;
+        }
+    }
+    gpa
+}
+
 #[tauri::command]
 fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
     let total_credit = get_credit_sum(courses.clone());

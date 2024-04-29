@@ -96,8 +96,8 @@ fn calculate_honours(year3: Vec<CourseDetail>, year4:Vec<CourseDetail>){
     let y3_gpa = calculate_year_gpa(year3.clone());
     let y4_gpa = calculate_year_gpa(year4.clone());
     let mut result = format!("Junior Honours:\n{}\nSenior Honours:\n {}\n" , y3_detail, y4_detail);
-    let final_gpa = ((y3_gpa * 0.4 + y4_gpa * 0.6)*100).round() / 100;
-    result = format!("{}Final GPA: {}", result, final_gpa);
+    let final_gpa = ((y3_gpa * 0.4 + y4_gpa * 0.6)*10).round() / 10;
+    result = format!("{}Final GPA: {} * 0.4 + {} * 0.6 = {} (1 d.p.)", result, y3_gpa, y4_gpa,final_gpa);
 }
 
 fn main() {

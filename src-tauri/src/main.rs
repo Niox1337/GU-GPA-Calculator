@@ -77,25 +77,10 @@ fn calculate_year_gpa(courses: Vec<CourseDetail>) -> f32 {
 #[tauri::command]
 fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
     let total_credit = get_credit_sum(courses.clone());
-    let mut gpa: f32 = 0.0;
     let mut result: String = String::new();
     result = format!("{}Total Credit: {}\n", result, total_credit);
 
-    for course in courses.iter() {
-        if &course.grade != "MV" {
-            let credit = &course.credit.parse::<f32>().unwrap();
-            let percentage = credit / total_credit as f32;
-            let mut grade = get_number_from_grade(&course.grade).unwrap();
-            if grade > 0 {
-                grade -= get_second_char_as_number(&course.grade).unwrap();
-            }
-            let final_grade = (grade as f32 * percentage * 100.0).round() / 100.0;
-            gpa += grade as f32 * percentage;
-            result = format!("{}{} contributes {} * ({} / {})  = {}\n", result, course.course, grade, credit, total_credit, final_grade)
-        } else {
-            result = format!("{}{} doesn't count\n", result, course.course)
-        }
-    }
+    let gpa = calculate_year_gpa(courses.clone());
     let rounded_gpa = gpa.round() as i16;
     let gpa_2dp = (gpa * 100.0).round() / 100.0;
     let letter_grade = get_grade_from_number(rounded_gpa);

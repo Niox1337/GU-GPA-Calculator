@@ -88,6 +88,20 @@ fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
     result
 }
 
+fn get_honours_class(gpa: f32) -> String {
+    if gpa >= 17.5 {
+        "First Class Honours".to_string()
+    } else if gpa >= 14.5 {
+        "Second Class Honours (Upper Division)".to_string()
+    } else if gpa >= 11.5 {
+        "Second Class Honours (Lower Division)".to_string()
+    } else if gpa >= 8.5 {
+        "Third Class Honours".to_string()
+    } else {
+        "Fail".to_string()
+    }
+}
+
 //function to calculate honours
 #[tauri::command]
 fn calculate_honours(year3: Vec<CourseDetail>, year4:Vec<CourseDetail>){

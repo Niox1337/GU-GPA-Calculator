@@ -3,6 +3,7 @@
 
 
 use serde::Deserialize;
+use serde_json::Value::Null;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
@@ -88,17 +89,19 @@ fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
     result
 }
 
-fn get_honours_class(gpa: f32) -> String {
-    if gpa >= 17.5 {
+fn get_direct_honours_class(gpa: f32) -> String {
+    if gpa >= 17.5 && gpa <= 22.0{
         "First Class Honours".to_string()
-    } else if gpa >= 14.5 {
+    } else if gpa >= 14.5 && gpa <= 17.0{
         "Second Class Honours (Upper Division)".to_string()
-    } else if gpa >= 11.5 {
+    } else if gpa >= 11.5 && gpa <= 14.0{
         "Second Class Honours (Lower Division)".to_string()
-    } else if gpa >= 8.5 {
+    } else if gpa >= 8.5 && gpa <= 11.0{
         "Third Class Honours".to_string()
-    } else {
+    } else if gpa <= 8.0{
         "Fail".to_string()
+    } else {
+        Null.to_string()
     }
 }
 

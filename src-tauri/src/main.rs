@@ -2,6 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 
+use serde::de::Unexpected::Map;
 use serde::Deserialize;
 use serde_json::Value::Null;
 
@@ -89,6 +90,16 @@ fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
     result
 }
 
+fn get_indirect_honours_class(year3: Vec<CourseDetail>, year4:Vec<CourseDetail>, gpa:f32) -> String {
+    let distribution = Map::new();
+    for course in year3.iter() {
+        if course.grade.starts_with("A") {
+            return "Fail".to_string();
+        }
+    }
+    Null.to_string()
+}
+
 fn get_direct_honours_class(gpa: f32) -> String {
     if gpa >= 17.5 && gpa <= 22.0{
         "First Class Honours".to_string()
@@ -115,6 +126,10 @@ fn calculate_honours(year3: Vec<CourseDetail>, year4:Vec<CourseDetail>){
     let mut result = format!("Junior Honours:\n{}\nSenior Honours:\n {}\n" , y3_detail, y4_detail);
     let final_gpa = ((y3_gpa * 0.4 + y4_gpa * 0.6)*10).round() / 10;
     result = format!("{}Final GPA: {} * 0.4 + {} * 0.6 = {} (1 d.p.)", result, y3_gpa, y4_gpa,final_gpa);
+    let mut honours_class = get_direct_honours_class(final_gpa);
+    if honours_class == Null.to_string(){
+        honours_class = get_indirect_honours_class(year3, year4, final_gpa);
+    }
 }
 
 fn main() {

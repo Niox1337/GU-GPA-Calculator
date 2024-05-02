@@ -92,9 +92,23 @@ fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
 
 fn get_indirect_honours_class(year3: Vec<CourseDetail>, year4:Vec<CourseDetail>, gpa:f32) -> String {
     let distribution = Map::new();
-    let total_credit = get_credit_sum(year3.clone());
+    let total_credit = get_credit_sum(year3.clone()) + get_credit_sum(year4.clone());
     for course in year3.iter() {
         let course_weigh = (course.credit.parse::<i16>().unwrap()/total_credit) as f32 * 0.4;
+        if course.grade.starts_with("A") {
+            distribution["A"] += course_weigh;
+        } else if course.grade.starts_with("B") {
+            distribution["B"] += course_weigh;
+        } else if course.grade.starts_with("C") {
+            distribution["C"] += course_weigh;
+        } else if course.grade.starts_with("D") {
+            distribution["D"] += course_weigh;
+        } else {
+            distribution["Fail"] += course_weigh;
+        }
+    }
+    for course in year4.iter() {
+        let course_weigh = (course.credit.parse::<i16>().unwrap()/total_credit) as f32 * 0.6;
         if course.grade.starts_with("A") {
             distribution["A"] += course_weigh;
         } else if course.grade.starts_with("B") {

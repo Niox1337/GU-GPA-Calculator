@@ -90,36 +90,29 @@ fn get_calculation_detail(courses: Vec<CourseDetail>) -> String {
     result
 }
 
+fn calculate_course_weight_and_distribution(course: &CourseDetail, total_credit: i16, distribution: &mut std::collections::HashMap<String, f32>, weight: f32) {
+    let course_weigh = (course.credit.parse::<i16>().unwrap() / total_credit) as f32 * weight;
+    if course.grade.starts_with("A") {
+        *distribution.entry("A".to_string()).or_insert(0.0) += course_weigh;
+    } else if course.grade.starts_with("B") {
+        *distribution.entry("B".to_string()).or_insert(0.0) += course_weigh;
+    } else if course.grade.starts_with("C") {
+        *distribution.entry("C".to_string()).or_insert(0.0) += course_weigh;
+    } else if course.grade.starts_with("D") {
+        *distribution.entry("D".to_string()).or_insert(0.0) += course_weigh;
+    } else {
+        *distribution.entry("Fail".to_string()).or_insert(0.0) += course_weigh;
+    }
+}
+
 fn get_indirect_honours_class(year3: Vec<CourseDetail>, year4:Vec<CourseDetail>, gpa:f32) -> String {
-    let distribution = Map::new();
+    let mut distribution = std::collections::HashMap::new();
     let total_credit = get_credit_sum(year3.clone()) + get_credit_sum(year4.clone());
     for course in year3.iter() {
-        let course_weigh = (course.credit.parse::<i16>().unwrap()/total_credit) as f32 * 0.4;
-        if course.grade.starts_with("A") {
-            distribution["A"] += course_weigh;
-        } else if course.grade.starts_with("B") {
-            distribution["B"] += course_weigh;
-        } else if course.grade.starts_with("C") {
-            distribution["C"] += course_weigh;
-        } else if course.grade.starts_with("D") {
-            distribution["D"] += course_weigh;
-        } else {
-            distribution["Fail"] += course_weigh;
-        }
+        calculate_course_weight_and_distribution(course, total_credit, &mut distribution, 0.4);
     }
     for course in year4.iter() {
-        let course_weigh = (course.credit.parse::<i16>().unwrap()/total_credit) as f32 * 0.6;
-        if course.grade.starts_with("A") {
-            distribution["A"] += course_weigh;
-        } else if course.grade.starts_with("B") {
-            distribution["B"] += course_weigh;
-        } else if course.grade.starts_with("C") {
-            distribution["C"] += course_weigh;
-        } else if course.grade.starts_with("D") {
-            distribution["D"] += course_weigh;
-        } else {
-            distribution["Fail"] += course_weigh;
-        }
+        calculate_course_weight_and_distribution(course, total_credit, &mut distribution, 0.6);
     }
     Null.to_string()
 }

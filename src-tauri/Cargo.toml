@@ -1,8 +1,8 @@
 [package]
 name = "gu-gpa-calculator"
-version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
+version = "1.1.0"
+description = "GPA calculator for University of Glasgow students"
+authors = ["Zhixiang Feng"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

@@ -48,6 +48,8 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           
   publish-tauri:
+    needs: extract-version
+    if: always() && (needs.extract-version.outcome == 'success')
     permissions:
       contents: write
     strategy:

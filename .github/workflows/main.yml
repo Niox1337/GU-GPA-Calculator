@@ -19,7 +19,7 @@ jobs:
         id: commit_message
         run: |
           # Get the latest commit message
-          COMMIT_MSG=$(git log -1 --pretty=%B | tr -d '\n' | sed 's/^[ \t]*//;s/[ \t]*$//')
+          COMMIT_MSG=$(git log -1 --pretty="%s" | tr -d '\n' | sed 's/^[ \t]*//;s/[ \t]*$//')
           echo "Commit message: ${COMMIT_MSG}"
           echo "COMMIT_MSG=${COMMIT_MSG}" >> $GITHUB_ENV
 
@@ -42,8 +42,9 @@ jobs:
             exit 1
           fi
           echo "Version found: $VERSION"
-          echo "VERSION=${VERSION}" | tr -d '\n' >> $GITHUB_ENV
-          
+          echo "VERSION=${VERSION}" | tr -d '\n' >> $GITHUB_OUTPUT
+    outputs:
+      version: ${{ steps.extract_version.outputs.VERSION }}
   publish-tauri:
     needs: extract-version
     if: ${{ always() && contains(join(needs.extract-version.result, ','), 'success') }}
@@ -99,8 +100,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: GPA-Cal-v${{ env.VERSION }}
-          releaseName: '${{ env.APP_NAME }} v${{ env.VERSION }}'
+          tagName: GPA-Cal-v${{ needs.extract-version.outputs.version }}
+          releaseName: '${{ env.APP_NAME }} v${{ needs.extract-version.outputs.version }}'
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: true
           prerelease: false

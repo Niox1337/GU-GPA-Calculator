@@ -21,7 +21,7 @@ jobs:
         id: commit_message
         run: |
           # Get the latest commit message
-          COMMIT_MSG=$(git log -1 --pretty=%B)
+          COMMIT_MSG=$(git log -1 --pretty=%B | tr -d '\n' | sed 's/^[ \t]*//;s/[ \t]*$//')
           echo "Commit message: ${COMMIT_MSG}"
           echo "COMMIT_MSG=${COMMIT_MSG}" >> $GITHUB_ENV
 

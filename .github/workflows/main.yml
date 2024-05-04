@@ -1,8 +1,6 @@
 name: Publish Release
 on:
   push:
-    tags:
-      - 'v*'
     branches: 'release'
   workflow_dispatch:
 

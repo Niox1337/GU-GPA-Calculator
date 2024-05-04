@@ -3,7 +3,7 @@ on:
   push:
     tags:
       - 'v*'
-    branches: '*'
+    branches: 'release'
   workflow_dispatch:
 
 env:
@@ -11,6 +11,42 @@ env:
 
 
 jobs:
+  extract-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Get Commit Message
+        id: commit_message
+        run: |
+          # Get the latest commit message
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "Commit message: ${COMMIT_MSG}"
+          echo "COMMIT_MSG=${COMMIT_MSG}" >> $GITHUB_ENV
+
+      - name: Check Commit Message
+        run: |
+          # If the commit message doesn't start with "release: v", exit
+          if [[ "${{ env.COMMIT_MSG }}" != release:\ v* ]]; then
+            echo "Commit message does not start with 'release: v'. Exiting..."
+            exit 1
+          else
+            echo "Commit message starts with 'release: v'. Continuing..."
+          fi
+
+      - name: Extract Version from Commit Message
+        id: extract_version
+        run: |
+          # Extract the version number (e.g., v1.0.0) from the commit message
+          VERSION=$(echo "${{ env.COMMIT_MSG }}" | grep -oP 'release: v\K[0-9]+\.[0-9]+\.[0-9]+')
+          if [[ -z "$VERSION" ]]; then
+            echo "No version found in commit message. Exiting..."
+            exit 1
+          fi
+          echo "Version found: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          
   publish-tauri:
     permissions:
       contents: write
@@ -43,7 +79,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          cache: 'npm' # Set this to npm, yarn or pnpm.
+          cache: 'npm'
 
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
@@ -58,14 +94,14 @@ jobs:
 
       - name: install frontend dependencies
         # If you don't have `beforeBuildCommand` configured you may want to build your frontend here too.
-        run: npm install # change this to npm or pnpm depending on which one you use.
+        run: npm install
 
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
-          releaseName: 'App v__VERSION__'
+          tagName: GPA-Cal-v${{ env.VERSION }}
+          releaseName: '${{ env.APP_NAME }} v${{ env.VERSION }}'
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: true
           prerelease: false

@@ -20,10 +20,13 @@ A simple software that can be used to calculate GPA for an academic year at the 
 - Showing calculation steps
 
 ## Future Plans
-- Feature: Store calculator setups locally
-- Feature: Calculate the class of honour's degree
-- Feature: Calculate the class of Master's degree
-- Feature: Course grade calculator
+- [ ] Feature: Store calculator setups locally
+- [ ] Feature: Calculate the class of honour's degree
+- [ ] Feature: Calculate the class of master's degree
+- [ ] Feature: Course grade calculator
+- [ ] Test: Unit testing
+- [ ] Feature: Support number input
+- [ ] Feature: Support percentage input
 
 ## Usage
 Initial Page:
@@ -45,5 +48,7 @@ The result and steps will be shown below the button
 ![image](https://github.com/Niox1337/GU-GPA-Calculator/assets/98660581/d66cec8f-54af-45a8-9d69-6e215fd11bd5)
 
 ## Support
+[Create New Issue](https://github.com/Niox1337/GU-GPA-Calculator/issues/new/choose)
+
 Contact Detail:
 contact@zhixiangfeng.com

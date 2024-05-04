@@ -57,10 +57,8 @@ jobs:
             args: '--target aarch64-apple-darwin'
           - platform: 'macos-latest' # for Intel based macs.
             args: '--target x86_64-apple-darwin'
-          - platform: 'ubuntu-22.04' # For ARM-based Ubuntu
-            args: '--target aarch64-unknown-linux-gnu'
           - platform: 'ubuntu-22.04' # For x86_64 Ubuntu
-            args: '--target x86_64-unknown-linux-gnu'
+            args: ''
           - platform: 'windows-latest'
             args: ''
 

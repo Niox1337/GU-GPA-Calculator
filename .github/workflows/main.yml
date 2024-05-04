@@ -46,9 +46,7 @@ jobs:
           
   publish-tauri:
     needs: extract-version
-    if: |
-      always() && 
-      (needs.extract-version.outcome == 'success')
+    if: ${{ always() && contains(join(needs.extract-version.result, ','), 'success') }}
     permissions:
       contents: write
     strategy:

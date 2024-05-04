@@ -46,7 +46,9 @@ jobs:
           
   publish-tauri:
     needs: extract-version
-    if: always() && (needs.extract-version.outcome == 'success')
+    if: |
+      always() && 
+      (needs.extract-version.outcome == 'success')
     permissions:
       contents: write
     strategy:

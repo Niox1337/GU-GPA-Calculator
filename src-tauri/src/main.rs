@@ -73,7 +73,12 @@ fn calculate_year_gpa(courses: Vec<CourseDetail>) -> f32 {
         if &course.grade != "MV" {
             let credit = &course.credit.parse::<f32>().unwrap();
             let percentage = credit / total_credit as f32;
-            let mut grade = get_number_from_grade(&course.grade).unwrap();
+            let mut grade;
+            if is_numeric(&course.grade) {
+                grade = course.grade.parse::<i16>().unwrap();
+            } else {
+                grade = get_number_from_grade(&course.grade).unwrap();
+            }
             if grade > 0 {
                 grade -= get_second_char_as_number(&course.grade).unwrap();
             }

@@ -16,6 +16,13 @@ struct CourseDetail {
 }
 
 
+fn is_numeric(s: &str) -> bool {
+    match s.parse::<f64>() {
+        Ok(_) => true,
+        Err(_) => false,
+    }
+}
+
 fn get_number_from_grade(grade: &str) -> Option<i16> {
     match grade.chars().next() {
         Some('A') => Some(23),
